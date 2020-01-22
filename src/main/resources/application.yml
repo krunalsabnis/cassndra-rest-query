@@ -1,0 +1,16 @@
+kafka:
+  bootstrapAddress: "localhost:9092"
+  events:
+    topic: device-events
+
+logging:
+  level:
+    root: INFO
+
+spring:
+  data:
+    cassandra:
+      contact-points: 127.0.0.1
+      keyspace: iot
+      port: 9042
+      schema-action: NONE
