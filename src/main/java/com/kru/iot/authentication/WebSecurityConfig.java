@@ -11,25 +11,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Arrays;
-
-
-/**
-* <h1>Qualibrate 3.0 Cloud Platform API</h1>
-* 
-* Web Security Configuration
-* <p>
-* Enable basic Auth.
-* Restrict open access based on path pattern
-*
-* @author <a href="mailto:krunal.sabnis@qualibrate.com">Krunal Sabnis</a>
-* @version 1.0
-* @since   2018-06-01 
-*/
 
 @Configuration
 @EnableWebSecurity
@@ -39,8 +24,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthenticationProvider authenticationProvider;
 
-    public static final String PUBLIC_PATHS = "/rs/api/v[0-9]+/auth/.*|.*swagger.*|/favicon\\.ico|/info|/health";
-    
+    public static final String PUBLIC_PATHS = "/api/v[0-9]+/auth/.*|.*swagger.*|/favicon\\.ico|/info|/health";
+
     public WebSecurityConfig() {
         super(true);
     }
@@ -65,45 +50,39 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-    	http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN)).and()
-        //http
-        // Allow anonymous access
-        .anonymous().and()
+        http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN)).and()
+                //http
+                // Allow anonymous access
+                .anonymous().and()
 
-        // Enable Basic Authentication
-        .httpBasic().realmName("Qualibrate Repository APIs").and()
+                // Enable Basic Authentication
+                .httpBasic().realmName("Cassandra REST APIs").and()
 
-        .servletApi().and()
+                .servletApi().and()
 
-        // Stateless session management
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                // Stateless session management
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
-        // Disable CSRF & Frame Options since we're not serving HTML content
-        .csrf().disable()
-        .headers().frameOptions().disable().and()
-        .headers().xssProtection().disable().and()
+                // Disable CSRF & Frame Options since we're not serving HTML content
+                .csrf().disable()
+                .headers().frameOptions().disable().and()
+                .headers().xssProtection().disable().and()
 
 
-        .authorizeRequests()
-        // Allow anonymous resource requests
-        .antMatchers("/").permitAll()
-        .antMatchers("/health").permitAll()
-        .antMatchers("/info").permitAll()
-        .antMatchers("/favicon.ico").permitAll()
-        
-//        .antMatchers("/swagger-resources").permitAll()
-//        .antMatchers("/swagger-ui.html").permitAll()
+                .authorizeRequests()
+                // Allow anonymous resource requests
+                .antMatchers("/").permitAll()
 
-        // Secure all APIs
-        .regexMatchers(HttpMethod.OPTIONS, "/api/v[0-9]+/.*").permitAll();
-        //.regexMatchers("/api/v[0-9]+/.*").hasAnyRole(ADMIN_ROLE, USER_ROLE, DOCS_ROLE);
-    	
-    	http.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-    	.addFilterAfter(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
-    	
+
+                // Secure all APIs
+                .regexMatchers(HttpMethod.OPTIONS, "/api/v[0-9]+/.*").permitAll();
+
+        http.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+
         // disable page caching
         http.headers().cacheControl();
-    	//.and()
+        //.and()
 
 
     }

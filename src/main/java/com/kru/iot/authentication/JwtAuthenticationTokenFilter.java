@@ -13,17 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
-* <h1>Qualibrate 3.0 Cloud Platform API</h1>
-* 
-* <p>
-* Filters Requests starting with /api to cover all API calls. Ignoring Swagger Page loading requests
-* Filters for Token and authenticate
-*
-* @author <a href="mailto:krunal.sabnis@qualibrate.com">Krunal Sabnis</a>
-* @version 1.0
-* @since   2018-06-01 
-*/
 
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
 
